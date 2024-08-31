@@ -27,17 +27,17 @@ class Solution {
             return a[col - 1] - b[col - 1];
         });
 
-        // 2. 정렬된 데이터에서 rowBegin <= S_i <= row_end까지의 S_i의 합을 구함
+        // 2. 정렬된 데이터에서 rowBegin <= i <= row_end까지의 S_i의 합을 구함
         // S_i는 1번에서 정렬된 데이터에서 i 번째 행의 튜플에 대해 각 컬럼의 값을 i 로 나눈 나머지들의 합
         // 3. bitwise XOR 연산을 수행하여 해시 값을 반환
         int answer = 0;
 
         for (int row = rowBegin; row <= rowEnd; row++) {
             // S_i를 구함
-            int sum = 0;
-            for (int i = 0; i < data[row].length; i++) {
-                sum += data[row - 1][i] % row;
-            }
+            int finalRow = row;
+            int sum = Arrays.stream(data[row - 1])
+                    .map(i -> i % (finalRow))
+                    .sum();
 
             // bitwise XOR 연산을 수행
             answer ^= sum;
