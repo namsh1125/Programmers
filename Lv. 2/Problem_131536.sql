@@ -1,0 +1,10 @@
+-- 프로그래머스 131536번. 재구매가 일어난 상품과 회원 리스트 구하기
+-- https://school.programmers.co.kr/learn/courses/30/lessons/131536
+
+SELECT DISTINCT USER_ID, PRODUCT_ID
+FROM (
+    SELECT USER_ID, PRODUCT_ID, COUNT(*) OVER(PARTITION BY USER_ID, PRODUCT_ID) AS CNT
+    FROM ONLINE_SALE
+) AS A
+WHERE CNT > 1
+ORDER BY USER_ID ASC, PRODUCT_ID DESC;
