@@ -1,0 +1,24 @@
+-- 프로그래머스 131124번. 그룹별 조건에 맞는 식당 목록 출력하기
+-- https://school.programmers.co.kr/learn/courses/30/lessons/131124
+
+-- 가장 많은 리뷰를 작성한 사람을 저장하는 테이블
+WITH MAX_REVIEWER AS (
+    SELECT MEMBER_ID
+    FROM REST_REVIEW
+    GROUP BY MEMBER_ID
+    ORDER BY COUNT(*) DESC
+    LIMIT 1
+),
+
+-- 가장 많은 리뷰를 작성한 사람이 작성한 리뷰를 저장하는 테이블
+REVIEW_BY_MAX_REVIEWER AS (
+    SELECT *
+    FROM REST_REVIEW
+    WHERE MEMBER_ID = (SELECT MEMBER_ID FROM MAX_REVIEWER)
+)
+
+SELECT A.MEMBER_NAME, B.REVIEW_TEXT, DATE_FORMAT(B.REVIEW_DATE, '%Y-%m-%d') AS REVIEW_DATE
+FROM MEMBER_PROFILE AS A
+JOIN REVIEW_BY_MAX_REVIEWER AS B
+ON A.MEMBER_ID = B.MEMBER_ID
+ORDER BY B.REVIEW_DATE ASC, B.REVIEW_TEXT ASC
