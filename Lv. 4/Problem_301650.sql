@@ -1,0 +1,21 @@
+-- 프로그래머스 301650번. 특정 세대의 대장균 찾기
+-- https://school.programmers.co.kr/learn/courses/30/lessons/301650
+
+-- 1세대 대장균 개체를 저장하는 테이블
+WITH FIRST_GENERATION AS (
+    SELECT ID
+    FROM ECOLI_DATA
+    WHERE PARENT_ID IS NULL
+),
+
+-- 2세대 대장균 개체를 저장하는 테이블
+SECOND_GENERATION AS (
+    SELECT ID
+    FROM ECOLI_DATA
+    WHERE PARENT_ID IN (SELECT ID FROM FIRST_GENERATION)
+)
+
+SELECT ID
+FROM ECOLI_DATA
+WHERE PARENT_ID IN (SELECT ID FROM SECOND_GENERATION)
+ORDER BY ID ASC
